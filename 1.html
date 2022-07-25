@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Local Storage</title>
+    <style type="text/CSS">
+        table {
+            width: 90%;
+            border-collapse: collapse;
+            background-color: lightblue;
+            font-family: Perpetua;
+        }
+
+        table, td, th {
+            border: 1px solid black;
+            padding: 4px;
+        }
+
+        th {
+            text-align: center;
+            color: white;
+            background-color: darkblue;
+        }
+
+        tr.oddrow {
+            background-color: white;
+        }
+
+        td {
+            text-align: center;
+        }
+    </style>
+    <script type="text/javascript">
+        function display(){
+            let divBlock = document.getElementById("display");
+            let str = "";
+            str += "<table><tr><th>Title</th><th>Author</th><th>Year</th><th>URL</th></tr>"
+            for(i=0;i<localStorage.length;i++){
+                let Key = localStorage.key(i);
+                if(Key.charAt(0) == "n" && Key.charAt(1) == "t" && Key.charAt(2) == "o" && Key.charAt(3) == "u" && Key.charAt(4) == "-"){
+                    let objj = localStorage.getItem(Key);
+                    objj = JSON.parse(objj);
+                    str += "<tr><td>" + objj.title + "</td><td>" + objj.author + "</td><td>" + objj.year + "</td><td>" + objj.url + "</td></tr>";
+                }
+            }
+            divBlock.innerHTML = str + "</table>";
+        }
+        function clear(){
+            let divBlock = document.getElementById("display");
+            divBlock.innerHTML = "<table><tr><th>Title</th><th>Author</th><th>Year</th><th>URL</th></table>"
+        }
+        function main(){
+            document.getElementById("addButton").addEventListener("click",function(){
+                let time = new Date();
+                let strTime = "ntou-" + time.getTime();
+                let t = document.getElementById("t").value;
+                let a = document.getElementById("a").value;
+                let y = document.getElementById("y").value;
+                let u = document.getElementById("u").value;
+                let obj = {
+                    title: t,
+                    author: a,
+                    year: y,
+                    url: u
+                };
+                let objStr = JSON.stringify(obj);
+                localStorage.setItem(strTime,objStr);
+                display();
+            })
+            document.getElementById("removeAllButton").addEventListener("click",function(){
+                localStorage.clear();
+                alert("All items were removed!");
+                clear();
+            })
+        }
+        window.addEventListener("load",main,false);
+    </script>
+</head>
+
+<body>
+    <form action="#">
+        <p>
+            <label>Book Title:</label>
+            <input id="t" type="text">
+            <label>Author(s):</label>
+            <input id="a" type="text">
+            <label>Year:</label>
+            <input id="y" type="number">
+            <label>Book URL:</label>
+            <input id="u" type="url">
+        </p>
+        <p>
+            <input type="button" value="Add New Item" id="addButton">
+            <input type="button" value="Remove All Items" id="removeAllButton">
+        </p>
+    </form>
+    <hr>
+    <div id="display">
+    </div>
+</body>
+
+</html>
